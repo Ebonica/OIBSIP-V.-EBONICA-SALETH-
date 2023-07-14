@@ -1,0 +1,42 @@
+# EMAIL SPAM DETECTION USING MACHINE LEARNING
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+
+# Read the dataset
+email_data = pd.read_csv('spam.csv', encoding='latin-1')
+
+# Drop the columns which has NaN
+email_data = email_data.drop(columns=['Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4'])
+
+# Perform an analysis on the dataset
+print("Column Names: \n\n",email_data.columns)
+print("Shape: \n\n",email_data.shape)
+print("Head: \n\n",email_data.head())	
+print("Tail: \n\n",email_data.tail())	
+email_data.info()
+email_data.dtypes
+
+# Preprocessing
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(email_data['v2'])
+y = email_data['v1']
+
+# Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Model Selection
+model = MultinomialNB()
+
+# Model Training
+model.fit(X_train, y_train)
+
+# Model Evaluation
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+print(classification_report(y_test, y_pred))
+
+ 
