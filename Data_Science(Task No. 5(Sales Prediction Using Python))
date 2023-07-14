@@ -1,0 +1,66 @@
+# SALES PREDICTION USING PYTHON (LINEAR REGRESSION)
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# Read the dataset using pandas
+data = pd.read_csv('Advertising.csv')
+
+# Perform an analysis on the given dataset
+data.head()
+data=data.drop(columns=['Unnamed: 0'])
+print("Column Names: \n\n",data.columns)
+print("Shape: \n\n",data.shape)
+print("Head: \n\n",data.head())	
+print("Tail: \n\n",data.tail())	
+data.info()
+data.dtypes
+
+# Find the unique , non-unique values and value counts 
+print(data.TV.nunique())
+print(data.TV.unique())
+print(data.TV.value_counts())
+
+print(data.Radio.nunique())
+print(data.Radio.unique())
+print(data.Radio.value_counts())
+
+print(data.Newspaper.nunique())
+print(data.Newspaper.unique())
+print(data.Newspaper.value_counts())
+
+print(data.Sales.nunique())
+print(data.Sales.unique())
+print(data.Sales.value_counts())
+
+# To find the maximum sales and the corresponding advertising expenditures
+max_sales_row = data[data['Sales'] == data['Sales'].max()]
+
+# Get the corresponding values of 'TV', 'Radio', and 'Newspaper'
+max_sales_tv = max_sales_row['TV'].values[0]
+max_sales_radio = max_sales_row['Radio'].values[0]
+max_sales_newspaper = max_sales_row['Newspaper'].values[0]
+
+# Print the highest sales and the corresponding values of 'TV', 'Radio', and 'Newspaper'
+print("Highest Sales:")
+print(max_sales_row['Sales'].values[0])
+print("TV:", max_sales_tv)
+print("Radio:", max_sales_radio)
+print("Newspaper:", max_sales_newspaper)
+
+# Split the data into input (advertising expenditure) and output (sales) variables
+X = data[['TV', 'Radio', 'Newspaper']]
+y = data['Sales']
+
+# Create a linear regression model
+model = LinearRegression()
+
+# Train the model
+model.fit(X, y)
+
+# Predict sales for new advertising expenditure values
+# Here as an example we take the advertising expenditures of TV, Newspaper,Radio to be 1000,2000,3000
+new_advertising = pd.DataFrame({'TV': [1000], 'Radio': [2000], 'Newspaper': [3000]})
+predicted_sales = model.predict(new_advertising)
+
+# Print the predicted sales
+print("The predicted sales is:",predicted_sales)
