@@ -1,0 +1,49 @@
+# IRIS FLOWER CLASSIFICATION USING RANDOM FOREST 
+from sklearn.datasets import load_iris
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+# Load the Iris dataset
+iris = load_iris()
+
+# Create a DataFrame from the Iris dataset
+iris_df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+iris_df['species'] = iris.target_names[iris.target]
+
+# Save the DataFrame to a CSV file
+iris_df.to_csv('iris_dataset.csv', index=False)
+iris_data = pd.read_csv('iris_dataset.csv')
+
+# Performing analysis on the given dataset
+print("Column Names: \n\n",iris_data.columns)
+print("Shape: \n\n",iris_data.shape)
+print("Head: \n\n",iris_data.head())
+print("Tail:",iris_data.tail())	
+iris_data.info()
+iris_data.dtypes
+
+#Preprocessing
+from sklearn.preprocessing import LabelEncoder
+label_encoder=LabelEncoder()
+normalized_data=iris_data.apply(LabelEncoder().fit_transform)
+normalized_data.head()
+
+# Specify the variables
+X = iris_data.drop('species', axis=1)
+y = iris_data['species']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create an SVM classifier
+classifier = RandomForestClassifier()
+
+# Train the model
+classifier.fit(X_train, y_train)
+
+# Make predictions on the testing set
+y_pred = classifier.predict(X_test)
+
+# Evaluate the model
+print(classification_report(y_test, y_pred))
